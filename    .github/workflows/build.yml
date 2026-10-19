@@ -1,0 +1,22 @@
+name: Build Optimod 1.21.11
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Build
+        run: |
+          chmod +x gradlew || gradle wrapper --gradle-version 8.10
+          chmod +x gradlew
+          ./gradlew build --no-daemon
+      - name: Upload Jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: optimod-1.21.11
+          path: build/libs/*.jar
